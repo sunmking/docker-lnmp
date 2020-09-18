@@ -1,85 +1,85 @@
 version: '3'
 services:      # 集合
     mysql:
-        restart: always                            # 重启方式
-        container_name: mysql                    # 容器名称
-        image: mysql:8
-        command:
-          --default-authentication-plugin=mysql_native_password
-          --character-set-server=utf8mb4
-          --collation-server=utf8mb4_general_ci
-          --explicit_defaults_for_timestamp=true
-          --lower_case_table_names=1
-          --max_allowed_packet=128M;
-        ports:
-          - 23306:3306
-        volumes:
-          - ./data/mysql:/var/lib/mysql
-          - ./mysql/conf:/etc/mysql/conf.d
-          - ./logs/mysql:/data/mysql/logs
-        # 环境变量
-        environment:
-          - TZ=Asia/Shanghai # 设置时区
-          # mysql密码
-          - MYSQL_ROOT_PASSWORD=123456
-        networks:
-          app_net:
-            ipv4_address: 10.10.10.1
+      restart: always                            # 重启方式
+      container_name: mysql                    # 容器名称
+      image: mysql:8
+      command:
+        --default-authentication-plugin=mysql_native_password
+        --character-set-server=utf8mb4
+        --collation-server=utf8mb4_general_ci
+        --explicit_defaults_for_timestamp=true
+        --lower_case_table_names=1
+        --max_allowed_packet=128M;
+      ports:
+        - 23306:3306
+      volumes:
+        - ./data/mysql:/var/lib/mysql
+        - ./mysql/conf:/etc/mysql/conf.d
+        - ./logs/mysql:/data/mysql/logs
+      # 环境变量
+      environment:
+        - TZ=Asia/Shanghai # 设置时区
+        # mysql密码
+        - MYSQL_ROOT_PASSWORD=123456
+      networks:
+        app_net:
+          ipv4_address: 10.10.10.1
     nginx:
-        restart: always
-        image: nginx
-        container_name: nginx
-        # 依赖关系 先跑php
-        depends_on:
-          - php
-        ports:
-          - 8080:80
-          - 4433:433
-        volumes:
-          - ./nginx/conf.d:/etc/nginx/conf.d
-          - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
-          - ./app:/usr/share/nginx/html
-          - ./logs/nginx:/var/log/nginx/
-        networks:
-          app_net:
-            ipv4_address: 10.10.10.2
+      restart: always
+      image: nginx
+      container_name: nginx
+      # 依赖关系 先跑php
+      depends_on:
+        - php
+      ports:
+        - 8080:80
+        - 4433:433
+      volumes:
+        - ./nginx/conf.d:/etc/nginx/conf.d
+        - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+        - ./app:/usr/share/nginx/html
+        - ./logs/nginx:/var/log/nginx/
+      networks:
+        app_net:
+          ipv4_address: 10.10.10.2
     php:
-        build: ./php
-        image: php:7.4
-        restart: always
-        ports:
-          - 9001:9000
-        volumes:
-          - ./app:/var/www/html
-          - ./php/etc:/usr/local/etc
-          - ./logs/php:/var/log/php
-        stdin_open: true
-        tty: true   #这两条是防止启动php失败
-        depends_on:
-          - redis
-          - mysql
-        networks:
-          app_net:
-            ipv4_address: 10.10.10.3
-        environment:
-          - TZ=Asia/Shanghai # 设置时区
-        container_name: php
+      build: ./php
+      image: php:7.4
+      restart: always
+      ports:
+        - 9001:9000
+      volumes:
+        - ./app:/var/www/html
+        - ./php/etc:/usr/local/etc
+        - ./logs/php:/var/log/php
+      stdin_open: true
+      tty: true   #这两条是防止启动php失败
+      depends_on:
+        - redis
+        - mysql
+      networks:
+        app_net:
+          ipv4_address: 10.10.10.3
+      environment:
+        - TZ=Asia/Shanghai # 设置时区
+      container_name: php
     redis:
-        image: redis:latest
-        command:
-           redis-server /usr/local/etc/redis/redis.conf --requirepass 123456
-        ports:
-          - 26379:6379
-        volumes:
-          - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
-          - ./data/redis:/data
-        restart: always
-        environment:
-          - TZ=Asia/Shanghai # 设置时区
-        container_name: redis
-        networks:
-          app_net:
-            ipv4_address: 10.10.10.4
+      image: redis:latest
+      command:
+         redis-server /usr/local/etc/redis/redis.conf --requirepass 123456
+      ports:
+        - 26379:6379
+      volumes:
+        - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+        - ./data/redis:/data
+      restart: always
+      environment:
+        - TZ=Asia/Shanghai # 设置时区
+      container_name: redis
+      networks:
+        app_net:
+          ipv4_address: 10.10.10.4
 
 networks:
     # 配置docker network

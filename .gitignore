@@ -7,3 +7,5 @@
 /logs/mysql/*
 /logs/nginx/*
 /logs/php/*
+
+/.idea
