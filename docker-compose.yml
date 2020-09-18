@@ -45,7 +45,7 @@ services:      # 集合
           ipv4_address: 10.10.10.2
     php:
       build: ./php
-      image: php:7.4
+      image: php:7.4-fpm
       restart: always
       ports:
         - 9001:9000
