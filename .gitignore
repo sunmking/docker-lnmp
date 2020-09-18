@@ -1,0 +1,9 @@
+# Created by .ignore support plugin (hsz.mobi)
+# data
+/data/mysql/*
+/data/redis/*
+
+#logs
+/logs/mysql/*
+/logs/nginx/*
+/logs/php/*
