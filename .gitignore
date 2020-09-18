@@ -8,4 +8,9 @@
 /logs/nginx/*
 /logs/php/*
 
+!/app/index.html
+!/app/index.php
+!/app/mysql.php
+!/app/redis.php
+
 /.idea
