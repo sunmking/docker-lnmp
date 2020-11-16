@@ -19,7 +19,6 @@
     libmcrypt-dev \
     libpng-dev \
     libzip-dev \
-    && apt-get install --fix-missing \
     && docker-php-ext-configure gd  --with-jpeg=/usr/include --with-freetype=/usr/include/freetype2/ \
     && docker-php-ext-install -j$(nproc) bz2 zip gd iconv pdo_mysql mysqli bcmath calendar exif gettext sockets dba  pcntl  shmop sysvmsg sysvsem sysvshm \
     && pecl install redis-5.1.1 \
