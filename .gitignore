@@ -13,7 +13,8 @@
 !/app/mysql.php
 !/app/redis.php
 
+/nginx/conf.d/*
 !/nginx/conf.d/default.conf
-/nginx/conf.d
+
 
 /.idea
